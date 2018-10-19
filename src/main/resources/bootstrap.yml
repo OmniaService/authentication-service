@@ -1,0 +1,12 @@
+server:
+  port: 14000
+
+spring.profiles.active: local
+
+spring:
+  output.ansi.enabled: 'ALWAYS'
+  application:
+    name: auth-service
+  cloud:
+    config:
+      uri: http://localhost:15000
