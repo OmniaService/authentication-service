@@ -25,14 +25,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter   {
+public class UsernameAndPasswordFilterJwt extends UsernamePasswordAuthenticationFilter   {
 
     // We use auth manager to validate the user credentials
     private AuthenticationManager authManager;
 
     private final JwtConfig jwtConfig;
 
-    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {
+    public UsernameAndPasswordFilterJwt(AuthenticationManager authManager, JwtConfig jwtConfig) {
         this.authManager = authManager;
         this.jwtConfig = jwtConfig;
 
@@ -81,8 +81,11 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .compact();
 
         // Add token to header
+        response.getOutputStream().println(jwtConfig.getPrefix() + token);
         response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
     }
+
+
 
     // A (temporary) class just to represent the user credentials
     private static class UserCredentials {
