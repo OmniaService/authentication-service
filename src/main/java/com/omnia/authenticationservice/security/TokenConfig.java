@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.ImmutableList;
 import com.omnia.authenticationservice.filter.UsernameAndPasswordFilterJwt;
+import com.omnia.authenticationservice.model.UserEntity;
 import com.omnia.authenticationservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,19 +35,16 @@ public class TokenConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().cors().and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST,"/auth/save/")
+                .permitAll().and()
                 // handle an authorized attempts
                 .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                     .and()
-                .addFilter(new UsernameAndPasswordFilterJwt(authenticationManager(), jwtConfig))
+                .addFilterBefore(new UsernameAndPasswordFilterJwt(authenticationManager(), jwtConfig), UsernameAndPasswordFilterJwt.class)
                 .authorizeRequests()
-                    .antMatchers(HttpMethod.POST,
-                            "/auth",
-                            "/auth/",
-                            "/auth/save",
-                            "/auth/save/")
+                    .antMatchers(HttpMethod.POST,"/auth/")
                     .permitAll()
-                    .and()
-                .authorizeRequests()
                     .anyRequest()
                     .authenticated();
     }

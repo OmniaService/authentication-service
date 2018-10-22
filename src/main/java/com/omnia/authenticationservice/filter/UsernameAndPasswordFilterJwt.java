@@ -24,7 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "*")
 public class UsernameAndPasswordFilterJwt extends UsernamePasswordAuthenticationFilter   {
 
     // We use auth manager to validate the user credentials
@@ -38,7 +40,7 @@ public class UsernameAndPasswordFilterJwt extends UsernamePasswordAuthentication
 
         // By default, UsernamePasswordAuthenticationFilter listens to "/login" path.
         // In our case, we use "/auth". So, we need to override the defaults.
-        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(jwtConfig.getUri(), "POST"));
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/", "POST"));
     }
 
     @Override
@@ -109,4 +111,7 @@ public class UsernameAndPasswordFilterJwt extends UsernamePasswordAuthentication
             return this;
         }
     }
+
+
+
 }

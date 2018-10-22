@@ -32,6 +32,11 @@ public class UserController {
         log.debug("User saved: " + savedUser);
         return new Message("User created successfully!");
     }
+    @PostMapping("/")
+    public Message test(@RequestBody UserEntity user) {
+        System.out.println("test");
+        return new Message("User created successfully!");
+    }
 
     @GetMapping("/")
     public List<UserEntity> getAll() {
