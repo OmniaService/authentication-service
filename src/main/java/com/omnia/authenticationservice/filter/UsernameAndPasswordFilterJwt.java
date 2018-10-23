@@ -1,44 +1,42 @@
 package com.omnia.authenticationservice.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omnia.authenticationservice.security.JwtConfig;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
-
-import java.io.IOException;
-import java.sql.Date;
-import java.util.Collections;
-import java.util.stream.Collectors;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Date;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
-public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter   {
+@CrossOrigin(origins = "*")
+public class UsernameAndPasswordFilterJwt extends UsernamePasswordAuthenticationFilter   {
 
     // We use auth manager to validate the user credentials
     private AuthenticationManager authManager;
 
     private final JwtConfig jwtConfig;
 
-    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {
+    public UsernameAndPasswordFilterJwt(AuthenticationManager authManager, JwtConfig jwtConfig) {
         this.authManager = authManager;
         this.jwtConfig = jwtConfig;
 
         // By default, UsernamePasswordAuthenticationFilter listens to "/login" path.
         // In our case, we use "/auth". So, we need to override the defaults.
-        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(jwtConfig.getUri(), "POST"));
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/", "POST"));
     }
 
     @Override
@@ -81,8 +79,11 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .compact();
 
         // Add token to header
+        response.getOutputStream().println(jwtConfig.getPrefix() + token);
         response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
     }
+
+
 
     // A (temporary) class just to represent the user credentials
     private static class UserCredentials {
@@ -106,4 +107,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             return this;
         }
     }
+
+
+
 }
