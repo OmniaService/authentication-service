@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.omnia</groupId>
-    <artifactId>gateway-service</artifactId>
+    <artifactId>authentication-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>gateway-service</name>
-    <description>Demo project for Spring Boot</description>
+    <name>authentication-service</name>
+    <description>Omnia authentication service</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

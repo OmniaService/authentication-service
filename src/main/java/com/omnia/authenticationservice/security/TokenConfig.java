@@ -32,7 +32,6 @@ public class TokenConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/auth/save/")
                 .permitAll().and()
-                // handle an authorized attempts
                 .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                     .and()
                 .addFilterBefore(new UsernameAndPasswordFilterJwt(authenticationManager(), jwtConfig), UsernameAndPasswordFilterJwt.class)
@@ -42,10 +41,6 @@ public class TokenConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest()
                     .authenticated();
     }
-
-    // Spring has UserDetailsService interface, which can be overriden to provide our implementation for fetching user from database (or any other source).
-    // The UserDetailsService object is used by the auth manager to load the user from database.
-    // In addition, we need to define the password encoder also. So, auth manager can compare and verify passwords.
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
@@ -55,4 +50,5 @@ public class TokenConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
