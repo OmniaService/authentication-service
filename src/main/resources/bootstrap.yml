@@ -10,3 +10,8 @@ spring:
   cloud:
     config:
       uri: http://localhost:15000
+
+---
+spring:
+  profiles: docker
+  cloud.config.uri: http://omnia-config-service:15000
