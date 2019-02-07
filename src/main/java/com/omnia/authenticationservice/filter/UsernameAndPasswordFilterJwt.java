@@ -22,7 +22,6 @@ import java.sql.Date;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*")
 public class UsernameAndPasswordFilterJwt extends UsernamePasswordAuthenticationFilter   {
 
     // We use auth manager to validate the user credentials
